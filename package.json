@@ -1,0 +1,32 @@
+{
+  "private": true,
+  "name": "@night-watch/crawler",
+  "description": "Night Watch crawler",
+  "author": "Night Watch Project",
+  "license": "MIT",
+  "repository": "github:night-watch-project/crawler",
+  "version": "0.0.1",
+  "main": "src/server.js",
+  "scripts": {
+    "dev": "NODE_ENV=development node src/server",
+    "start": "NODE_ENV=production node src/server",
+    "docker:build": "docker build -t night-watch/crawler .",
+    "docker:start": "docker run -d -p 8501:8501 --name night-watch-crawler night-watch/crawler",
+    "docker:stop": "docker stop night-watch-crawler",
+    "docker:rm": "docker rm night-watch-crawler",
+    "docker:rmi": "docker rmi night-watch/crawler"
+  },
+  "dependencies": {
+    "@albert-team/spiderman": "^1.12.0",
+    "dotenv-flow": "^3.0.0-rc.1",
+    "fastify": "^2.6.0",
+    "firebase-admin": "^8.2.0",
+    "jsdom": "^15.1.1",
+    "metrohash": "^2.6.0"
+  },
+  "devDependencies": {
+    "eslint": "^6.0.1",
+    "eslint-plugin-react": "^7.14.2",
+    "eslint-plugin-react-hooks": "^1.6.1"
+  }
+}
