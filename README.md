@@ -1,4 +1,4 @@
-# NIGHT WATCH CRAWLER
+# Night Watch crawler
 
 ## INSTALLATION
 

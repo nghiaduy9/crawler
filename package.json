@@ -1,6 +1,6 @@
 {
   "private": true,
-  "name": "@night-watch/crawler",
+  "name": "@night-watch-project/crawler",
   "description": "Night Watch crawler",
   "author": "Night Watch Project",
   "license": "MIT",
