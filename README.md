@@ -17,6 +17,12 @@ $ yarn start # yarn dev for development
 
 ## DOCUMENTATION
 
+## Environment Variables
+
+- `NODE_ENV` (string): "development" or "production" environment
+- `PORT` (number): Port number to run the server
+- `FIREBASE_FIRESTORE_COLLECTION_PREFIX` (string): Prefix to distinguish between "development" & "production collections
+
 ### Routes
 
 #### GET `/`
@@ -25,7 +31,7 @@ $ yarn start # yarn dev for development
 
 ##### Response body
 
-- iam: `"/"`
+- `iam`: `"/"`
 
 #### POST `/`
 
@@ -33,9 +39,9 @@ $ yarn start # yarn dev for development
 
 ##### Request body
 
-- url (string): URL to crawl
-- cssSelectors (object): Mapping from CSS selectors to their types. Currently, only "string" is a valid type.
+- `url` (string): URL to crawl
+- `cssSelectors` (object): Mapping from CSS selectors to their types. Currently, only "string" is a valid type.
 
 ##### Response body
 
-- success (boolean): Status
+- `success` (boolean): Status
