@@ -14,14 +14,16 @@ server.get('/', async () => {
   return { iam: '/' }
 })
 
-server.post('/', async (req) => {
+server.post('/', async (req, res) => {
   const { url, cssSelectors } = req.body
   const urlEntity = new UrlEntity(url, new Scraper(cssSelectors), new DataProcessor(url))
   try {
     await scheduler.scheduleUrlEntity(urlEntity)
+    res.code(200)
     return { success: true }
   } catch (err) {
     req.log.error(err.message)
+    res.code(500)
     return { success: false }
   }
 })
