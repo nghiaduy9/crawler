@@ -20,11 +20,9 @@ server.post('/', async (req, res) => {
   try {
     await scheduler.scheduleUrlEntity(urlEntity)
     res.code(200)
-    return { success: true }
   } catch (err) {
     req.log.error(err.message)
     res.code(500)
-    return { success: false }
   }
 })
 
