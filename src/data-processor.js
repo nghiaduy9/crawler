@@ -35,7 +35,7 @@ module.exports = class DataProcessor extends SpidermanDataProcessor {
     }
     // notify the user of the change(s)
     try {
-      await axios.post(`${process.env.CHATBOT_ADDRESS}/notifications/changes`, {
+      await axios.post(`${process.env.NOTIFICATION_SERVICE_ADDRESS}/notifications/changes`, {
         url: `${this.url}`,
         changes: `${changes}`
       })

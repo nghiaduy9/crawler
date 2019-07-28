@@ -22,6 +22,7 @@ $ yarn start # yarn dev for development
 - `NODE_ENV` (string): "development" or "production" environment
 - `PORT` (number): Port number to run the server
 - `FIREBASE_FIRESTORE_COLLECTION_PREFIX` (string): Prefix to distinguish between "development" & "production collections
+- `NOTIFICATION_SERVICE_ADDRESS` (string): Address of notification service
 
 ### Routes
 
