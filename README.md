@@ -21,8 +21,9 @@ $ yarn start # yarn dev for development
 - `NODE_ENV` (string): "development" or "production" environment
 - `PORT` (number): Port number to run the server
 - `NOTIFICATION_SERVICE_ADDRESS` (string): Address of notification service
-- `MONGODB_URI` (string): Address of MongoDB
-- `MONGODB_DB_NAME` (string): Name of MongoDB Database
+- `MONGODB_URI` (string): MongoDB URI
+- `MONGODB_DB_NAME` (string): Database name
+
 ### Routes
 
 #### GET `/`

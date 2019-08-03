@@ -36,15 +36,15 @@ module.exports = class DataProcessor extends SpidermanDataProcessor {
           if (value !== prevData[css]) changes[css] = [prevData[css], value]
         }
 
-        // notify the user of the changes
         if (Object.keys(changes).length !== 0) {
           History.updateOne({ id }, { $set: data })
+          // notify the user of the changes
           const { status } = await axios.post(
             `${process.env.NOTIFICATION_SERVICE_ADDRESS}/notifications/changes`,
             { url: this.url, changes }
           )
           if (status < 200 || status >= 300)
-            throw new Error('Failed to send request to the notification service')         
+            throw new Error('Failed to send request to the notification service')
         }
       }
       return { success: true }
