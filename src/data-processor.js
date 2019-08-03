@@ -27,24 +27,25 @@ module.exports = class DataProcessor extends SpidermanDataProcessor {
       const History = await getCollection('history')
       const id = this.getUrlId(this.url)
       const [prevData] = await History.find({ id }).toArray()
-      
+
       if (prevData === undefined) {
         History.insertOne(data)
       } else {
-        History.updateOne({ id }, { $set: data }) // may need some optimizations if there is no change
-
         const changes = {}
         for (const [css, value] of Object.entries(data)) {
           if (value !== prevData[css]) changes[css] = [prevData[css], value]
         }
-        
+
         // notify the user of the changes
-        const { status } = await axios.post(
-          `${process.env.NOTIFICATION_SERVICE_ADDRESS}/notifications/changes`,
-          { url: this.url, changes }
-        )
-        if (status < 200 || status >= 300)
-          throw new Error('Failed to send request to the notification service')
+        if (Object.keys(changes).length !== 0) {
+          History.updateOne({ id }, { $set: data })
+          const { status } = await axios.post(
+            `${process.env.NOTIFICATION_SERVICE_ADDRESS}/notifications/changes`,
+            { url: this.url, changes }
+          )
+          if (status < 200 || status >= 300)
+            throw new Error('Failed to send request to the notification service')         
+        }
       }
       return { success: true }
     } catch (err) {
