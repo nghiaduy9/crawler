@@ -1,8 +1,7 @@
 const axios = require('axios')
-
 const { DataProcessor: SpidermanDataProcessor } = require('@albert-team/spiderman')
 const { MetroHash64 } = require('metrohash')
-const { History } = require('./firestore')
+const { getCollection } = require('./database')
 
 module.exports = class DataProcessor extends SpidermanDataProcessor {
   constructor(url) {
@@ -24,27 +23,33 @@ module.exports = class DataProcessor extends SpidermanDataProcessor {
   }
 
   async process(data) {
-    const docRef = History.doc(this.getUrlId(this.url))
-    const doc = await docRef.get()
-    const prevData = doc.exists ? doc.data() : {}
-    const changes = {}
-    for (const [css, value] of Object.entries(data)) {
-      if (value !== prevData[css]) {
-        changes[css] = [prevData[css], value]
-      }
-    }
-    // notify the user of the change(s)
     try {
-      await axios.post(`${process.env.NOTIFICATION_SERVICE_ADDRESS}/notifications/changes`, {
-        url: `${this.url}`,
-        changes: `${changes}`
-      })
+      const History = await getCollection('history')
+      const id = this.getUrlId(this.url)
+      const [prevData] = await History.find({ id }).toArray()
+      
+      if (prevData === undefined) {
+        History.insertOne(data)
+      } else {
+        History.updateOne({ id }, { $set: data }) // may need some optimizations if there is no change
+
+        const changes = {}
+        for (const [css, value] of Object.entries(data)) {
+          if (value !== prevData[css]) changes[css] = [prevData[css], value]
+        }
+        
+        // notify the user of the changes
+        const { status } = await axios.post(
+          `${process.env.NOTIFICATION_SERVICE_ADDRESS}/notifications/changes`,
+          { url: this.url, changes }
+        )
+        if (status < 200 || status >= 300)
+          throw new Error('Failed to send request to the notification service')
+      }
+      return { success: true }
     } catch (err) {
-      console.error(err)
+      console.error(err) // upgrade Spiderman to ^1.13.0 and use its logger
       return { success: false }
     }
-
-    docRef.set(data, { merge: true })
-    return { success: true }
   }
 }

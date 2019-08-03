@@ -6,7 +6,6 @@
 
 - Node.js >= 8
 - Dotenv files: `.env.production` and/or `.env.development`
-- Firebase Account Service file: `firebase-key.private.json`
 
 ### Instructions
 
@@ -21,9 +20,9 @@ $ yarn start # yarn dev for development
 
 - `NODE_ENV` (string): "development" or "production" environment
 - `PORT` (number): Port number to run the server
-- `FIREBASE_FIRESTORE_COLLECTION_PREFIX` (string): Prefix to distinguish between "development" & "production collections
 - `NOTIFICATION_SERVICE_ADDRESS` (string): Address of notification service
-
+- `MONGODB_URI` (string): Address of MongoDB
+- `MONGODB_DB_NAME` (string): Name of MongoDB Database
 ### Routes
 
 #### GET `/`
