@@ -6,7 +6,9 @@ const Scheduler = require('./scheduler')
 const Scraper = require('./scraper')
 const DataProcessor = require('./data-processor')
 
-const loggerLevel = process.env.NODE_ENV !== 'production' ? 'debug' : 'info'
+const { NODE_ENV, PORT } = process.env
+
+const loggerLevel = NODE_ENV !== 'production' ? 'debug' : 'info'
 const server = fastify({ ignoreTrailingSlash: true, logger: { level: loggerLevel } })
 const scheduler = new Scheduler()
 
@@ -29,7 +31,7 @@ server.post('/', async (req, res) => {
 const start = async () => {
   try {
     await Promise.all([
-      server.listen(process.env.PORT || 3002, '::'), // listen to all IPv6 and IPv4 addresses
+      server.listen(PORT, '::'), // listen to all IPv6 and IPv4 addresses
       scheduler.start()
     ])
   } catch (err) {
