@@ -8,24 +8,20 @@
   "version": "0.0.1",
   "main": "src/server.js",
   "scripts": {
+    "clean": "rm -r yarn.lock node_modules",
     "dev": "NODE_ENV=development node src/server",
-    "start": "NODE_ENV=production node src/server",
-    "docker:build": "docker build -t night-watch/crawler .",
-    "docker:start": "docker run -d -p 8501:8501 --name night-watch-crawler night-watch/crawler",
-    "docker:stop": "docker stop night-watch-crawler",
-    "docker:rm": "docker rm night-watch-crawler",
-    "docker:rmi": "docker rmi night-watch/crawler"
+    "start": "NODE_ENV=production node src/server"
   },
   "dependencies": {
-    "@albert-team/spiderman": "^1.12.0",
+    "@albert-team/spiderman": "^1.13.0",
     "axios": "^0.19.0",
-    "dotenv-flow": "^3.0.0-rc.1",
-    "fastify": "^2.6.0",
+    "dotenv-flow": "^3.1.0",
+    "fastify": "^2.8.0",
     "jsdom": "^15.1.1",
     "metrohash": "^2.6.0",
-    "mongodb": "^3.3.0-beta2"
+    "mongodb": "^3.3.2"
   },
   "devDependencies": {
-    "eslint": "^6.0.1"
+    "eslint": "^6.3.0"
   }
 }
