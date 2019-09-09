@@ -21,7 +21,7 @@ server.post('/', async (req, res) => {
   const urlEntity = new UrlEntity(url, new Scraper(cssSelectors), new DataProcessor(url))
   try {
     await scheduler.scheduleUrlEntity(urlEntity)
-    res.code(200)
+    res.code(204)
   } catch (err) {
     req.log.error(err.message)
     res.code(500)
