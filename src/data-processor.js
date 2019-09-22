@@ -25,11 +25,10 @@ module.exports = class DataProcessor extends SpidermanDataProcessor {
   async process(data) {
     try {
       const History = await getCollection('history')
-      const id = this.getUrlId(this.url)
-      const [prevData] = await History.find({ id }).toArray()
-
+      const _id = this.getUrlId(this.url)
+      const [prevData] = await History.find({ _id }).toArray()
       if (prevData === undefined) {
-        History.insertOne(data)
+        History.insertOne({_id,...data})
       } else {
         const changes = {}
         for (const [css, value] of Object.entries(data)) {
@@ -37,7 +36,7 @@ module.exports = class DataProcessor extends SpidermanDataProcessor {
         }
 
         if (Object.keys(changes).length !== 0) {
-          History.updateOne({ id }, { $set: data })
+          History.updateOne({ _id }, { $set: {_id,...data} })
           // notify the user of the changes
           const { status } = await axios.post(
             `${process.env.NOTIFICATION_SERVICE_ADDRESS}/notifications/changes`,
