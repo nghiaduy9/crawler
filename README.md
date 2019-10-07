@@ -40,5 +40,4 @@ $ yarn start # yarn dev for development
 
 ##### Request body
 
-- `url` (string): URL to crawl
-- `cssSelectors` (object): Mapping from CSS selectors to their types. Currently, only "string" is a valid type.
+- `watchID` (ObjectID): ID of the watch
