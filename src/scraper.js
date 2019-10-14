@@ -2,19 +2,20 @@ const { Scraper: SpidermanScraper } = require('@albert-team/spiderman')
 const { JSDOM } = require('jsdom')
 
 module.exports = class Scraper extends SpidermanScraper {
-  constructor(cssSelectors) {
+  constructor(watchData) {
     super()
-    // mapping from CSS selectors to their type (string, number,...)
-    this.cssSelectors = cssSelectors
+    this.watchData = watchData
   }
 
   parse(html) {
     const dom = new JSDOM(html)
     const { document } = dom.window
     const data = {}
-    for (const css of Object.keys(this.cssSelectors)) {
+    const { targets } = this.watchData
+    for (const target of targets) {
       // for now, ignore types and treat everything as string
-      data[css] = document.querySelector(css).textContent.trim()
+      const { cssSelector } = target
+      data[cssSelector] = document.querySelector(cssSelector).textContent.trim()
     }
     return { data, nextUrls: [] }
   }

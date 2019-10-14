@@ -1,50 +1,38 @@
 const axios = require('axios')
 const { DataProcessor: SpidermanDataProcessor } = require('@albert-team/spiderman')
-const { MetroHash64 } = require('metrohash')
-const { getCollection } = require('./database')
 
 module.exports = class DataProcessor extends SpidermanDataProcessor {
-  constructor(url) {
+  constructor(watchData) {
     super()
-    this.hasher = new MetroHash64()
-    this.url = url
-  }
-
-  /**
-   * Get base64 ID of the URL
-   * @param {string} url URL
-   * @return {string} ID
-   */
-  getUrlId(url) {
-    this.hasher.update(url)
-    return Buffer.from(this.hasher.digest())
-      .toString('base64')
-      .replace(/=+$/, '')
+    this.watchData = watchData
   }
 
   async process(data) {
     try {
-      const History = await getCollection('history')
-      const _id = this.getUrlId(this.url)
-      const [prevData] = await History.find({ _id }).toArray()
-      if (prevData === undefined) {
-        History.insertOne({_id,...data})
-      } else {
-        const changes = {}
-        for (const [css, value] of Object.entries(data)) {
-          if (value !== prevData[css]) changes[css] = [prevData[css], value]
+      const { _id: watchID, targets } = this.watchData
+      const updatedTargets = []
+      for (const target of targets) {
+        const { cssSelector } = target
+        if (target.data !== data[cssSelector]) {
+          target.oldData = target.data
+          target.data = data[cssSelector]
+          updatedTargets.push(target)
         }
-
-        if (Object.keys(changes).length !== 0) {
-          History.updateOne({ _id }, { $set: {_id,...data} })
-          // notify the user of the changes
-          const { status } = await axios.post(
-            `${process.env.NOTIFICATION_SERVICE_ADDRESS}/notifications/changes`,
-            { url: this.url, changes }
-          )
-          if (status < 200 || status >= 300)
-            throw new Error('Failed to send request to the notification service')
-        }
+      }
+      if (updatedTargets.length !== 0) {
+        // Update targets information of a watch
+        axios.put(
+          `${process.env.WATCH_MANAGER_ADDRESS}/${watchID}/targets`,
+          updatedTargets
+        )
+        // notify the user of the changes
+        const { url } = this.watchData
+        const { status } = await axios.post(
+          `${process.env.NOTIFICATION_SERVICE_ADDRESS}/notifications/changes`,
+          { url, updatedTargets }
+        )
+        if (status < 200 || status >= 300)
+          throw new Error('Failed to send request to the notification service')
       }
       return { success: true }
     } catch (err) {

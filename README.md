@@ -20,6 +20,7 @@ $ yarn start # yarn dev for development
 
 - `NODE_ENV` (string): "development" or "production" environment
 - `PORT` (number): Port number to run the server
+- `WATCH_MANAGER_ADDRESS` (string): Address of watch-manager service
 - `NOTIFICATION_SERVICE_ADDRESS` (string): Address of notification service
 - `MONGODB_URI` (string): MongoDB URI
 - `MONGODB_DB_NAME` (string): Database name
