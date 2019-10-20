@@ -36,7 +36,7 @@ module.exports = class DataProcessor extends SpidermanDataProcessor {
       }
       return { success: true }
     } catch (err) {
-      console.error(err) // upgrade Spiderman to ^1.13.0 and use its logger
+      this.logger.error(err)
       return { success: false }
     }
   }
