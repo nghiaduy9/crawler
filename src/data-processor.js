@@ -26,10 +26,10 @@ module.exports = class DataProcessor extends SpidermanDataProcessor {
           updatedTargets
         )
         // notify the user of the changes
-        const { url } = this.watchData
+        const { url, userID } = this.watchData
         const { status } = await axios.post(
           `${process.env.NOTIFICATION_SERVICE_ADDRESS}/notifications/changes`,
-          { url, updatedTargets }
+          { url, userID, updatedTargets }
         )
         if (status < 200 || status >= 300)
           throw new Error('Failed to send request to the notification service')

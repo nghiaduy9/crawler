@@ -18,12 +18,17 @@ server.get('/', async () => {
 })
 
 server.post('/', async (req, res) => {
-  const { watchID } = req.body
-  const { data } = await axios.get(`${process.env.WATCH_MANAGER_ADDRESS}/${watchID}`)
-  const watchData = data
-  const { url } = watchData
-  const urlEntity = new UrlEntity(url, new Scraper(watchData), new DataProcessor(watchData))
   try {
+    const { watchID } = req.body
+    const { data: watchData } = await axios.get(
+      `${process.env.WATCH_MANAGER_ADDRESS}/${watchID}`
+    )
+    const { url } = watchData
+    const urlEntity = new UrlEntity(
+      url,
+      new Scraper(watchData),
+      new DataProcessor(watchData)
+    )
     await scheduler.scheduleUrlEntity(urlEntity)
     res.code(204)
   } catch (err) {
