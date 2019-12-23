@@ -1,5 +1,3 @@
-require('dotenv-flow').config()
-
 const fastify = require('fastify')
 const axios = require('axios')
 const { UrlEntity } = require('@albert-team/spiderman/entities')
@@ -7,7 +5,7 @@ const Scheduler = require('./scheduler')
 const Scraper = require('./scraper')
 const DataProcessor = require('./data-processor')
 
-const { NODE_ENV, PORT } = process.env
+const { NODE_ENV, PORT, GATEWAY_ADDRESS } = process.env
 
 const loggerLevel = NODE_ENV !== 'production' ? 'debug' : 'info'
 const server = fastify({ ignoreTrailingSlash: true, logger: { level: loggerLevel } })
@@ -21,7 +19,7 @@ server.post('/', async (req, res) => {
   try {
     const { watchID } = req.body
     const { data: watchData } = await axios.get(
-      `${process.env.WATCH_MANAGER_ADDRESS}/${watchID}`
+      `${GATEWAY_ADDRESS}/api/wach-manager/${watchID}`
     )
     const { url } = watchData
     const urlEntity = new UrlEntity(

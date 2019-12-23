@@ -1,6 +1,8 @@
 const axios = require('axios')
 const { DataProcessor: SpidermanDataProcessor } = require('@albert-team/spiderman')
 
+const { GATEWAY_ADDRESS } = process.env
+
 module.exports = class DataProcessor extends SpidermanDataProcessor {
   constructor(watchData) {
     super()
@@ -22,14 +24,18 @@ module.exports = class DataProcessor extends SpidermanDataProcessor {
       if (updatedTargets.length !== 0) {
         // Update targets information of a watch
         axios.put(
-          `${process.env.WATCH_MANAGER_ADDRESS}/${watchID}/targets`,
+          `${GATEWAY_ADDRESS}/api/watch-manager/${watchID}/targets`,
           updatedTargets
         )
         // notify the user of the changes
         const { url, userID } = this.watchData
         const { status } = await axios.post(
-          `${process.env.NOTIFICATION_SERVICE_ADDRESS}/notifications/changes`,
-          { url, userID, updatedTargets }
+          `${GATEWAY_ADDRESS}/api/notification-service/notifications/changes`,
+          {
+            url,
+            userID,
+            updatedTargets
+          }
         )
         if (status < 200 || status >= 300)
           throw new Error('Failed to send request to the notification service')
