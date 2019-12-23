@@ -18,7 +18,7 @@
 
 ### Routes
 
-#### GET `/`
+#### 1. GET `/`
 
 > Just for testing
 
@@ -26,7 +26,7 @@
 
 - `iam`: `"/"`
 
-#### POST `/`
+#### 2. POST `/`
 
 > Execute a watch session
 
