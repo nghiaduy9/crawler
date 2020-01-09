@@ -19,7 +19,7 @@ server.post('/', async (req, res) => {
   try {
     const { watchID } = req.body
     const { data: watchData } = await axios.get(
-      `${GATEWAY_ADDRESS}/api/wach-manager/${watchID}`
+      `${GATEWAY_ADDRESS}/api/watch-manager/${watchID}`
     )
     const { url } = watchData
     const urlEntity = new UrlEntity(
@@ -28,6 +28,7 @@ server.post('/', async (req, res) => {
       new DataProcessor(watchData)
     )
     await scheduler.scheduleUrlEntity(urlEntity)
+
     res.code(204)
   } catch (err) {
     req.log.error(err.message)
