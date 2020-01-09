@@ -11,7 +11,7 @@ module.exports = class Scraper extends SpidermanScraper {
   parse(html) {
     const dom = new JSDOM(html)
     const { document } = dom.window
-    const data = {}
+    const data = {} // mapping from CSS selectors to their values
     const { targets } = this.watchData
     for (const target of targets) {
       // for now, ignore types and treat everything as string
