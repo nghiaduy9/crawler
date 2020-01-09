@@ -1,9 +1,10 @@
 const { Scraper: SpidermanScraper } = require('@albert-team/spiderman')
 const { JSDOM } = require('jsdom')
+const userAgents = require('../user-agents.private.json')
 
 module.exports = class Scraper extends SpidermanScraper {
   constructor(watchData) {
-    super()
+    super(userAgents)
     this.watchData = watchData
   }
 

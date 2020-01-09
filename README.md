@@ -4,7 +4,8 @@
 
 ### Requirements
 
-- Node.js >= 12.0.0
+- Node.js >= 12
+- `user-agents.private.json` containing an array of user agents
 
 ## DOCUMENTATION
 
