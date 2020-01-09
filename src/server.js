@@ -31,7 +31,7 @@ server.post('/', async (req, res) => {
     res.code(204)
   } catch (err) {
     req.log.error(err.message)
-    res.code(500)
+    res.code(500).send()
   }
 })
 
