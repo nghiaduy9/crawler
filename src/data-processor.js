@@ -47,12 +47,10 @@ module.exports = class DataProcessor extends SpidermanDataProcessor {
       const { _id: watchID, userID, url, targets } = this.watchData
       const updatedTargets = getUpdatedTargets(targets, data)
 
-      if (updatedTargets.length) {
-        await Promise.all([
-          updateWatchTargets(watchID, updatedTargets),
-          notifyChanges({ url, userID, updatedTargets })
-        ])
-      }
+      await Promise.all([
+        updateWatchTargets(watchID, updatedTargets),
+        updatedTargets.length && notifyChanges({ url, userID, updatedTargets })
+      ])
 
       return { success: true }
     } catch (err) {
