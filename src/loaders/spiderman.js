@@ -1,6 +1,7 @@
+const fp = require('fastify-plugin')
 const { Scheduler: SpidermanScheduler } = require('@albert-team/spiderman')
 
-module.exports = class Scheduler extends SpidermanScheduler {
+class Scheduler extends SpidermanScheduler {
   constructor() {
     super(null)
   }
@@ -12,3 +13,8 @@ module.exports = class Scheduler extends SpidermanScheduler {
     throw new Error('This should never be executed!')
   }
 }
+
+module.exports = fp((server) => {
+  const scheduler = new Scheduler()
+  server.decorate('scheduler', scheduler)
+})

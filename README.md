@@ -16,19 +16,3 @@
 - `GATEWAY_ADDRESS` (string): Address of the API gateway
 
 ### Routes
-
-#### 1. GET `/`
-
-> Just for testing
-
-##### Response body
-
-- `iam`: `"/"`
-
-#### 2. POST `/`
-
-> Execute a watch session
-
-##### Request body
-
-- `watchID` (ObjectID): ID of the watch

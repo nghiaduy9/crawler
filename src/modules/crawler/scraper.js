@@ -1,8 +1,8 @@
 const { Scraper: SpidermanScraper } = require('@albert-team/spiderman')
 const { JSDOM } = require('jsdom')
-const userAgents = require('../user-agents.private.json')
+const userAgents = require('../../../user-agents.private.json')
 
-module.exports = class Scraper extends SpidermanScraper {
+class Scraper extends SpidermanScraper {
   constructor(watchData) {
     super(userAgents)
     this.watchData = watchData
@@ -21,3 +21,5 @@ module.exports = class Scraper extends SpidermanScraper {
     return { data, nextUrls: [] }
   }
 }
+
+module.exports = Scraper
