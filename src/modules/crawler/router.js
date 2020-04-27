@@ -1,7 +1,7 @@
 const CrawlerService = require('./service')
 
-module.exports = async (server, opts) => {
-  const { scheduler } = opts
+module.exports = async (server) => {
+  const { scheduler } = server
   const crawlerService = new CrawlerService(scheduler)
 
   server.post('/', async (req, res) => {

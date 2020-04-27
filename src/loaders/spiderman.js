@@ -1,5 +1,5 @@
-const fp = require('fastify-plugin')
 const { Scheduler: SpidermanScheduler } = require('@albert-team/spiderman')
+const fp = require('fastify-plugin')
 
 class Scheduler extends SpidermanScheduler {
   constructor() {
@@ -14,7 +14,9 @@ class Scheduler extends SpidermanScheduler {
   }
 }
 
-module.exports = fp((server) => {
-  const scheduler = new Scheduler()
+const scheduler = new Scheduler()
+
+module.exports = fp(async (server) => {
+  await scheduler.start()
   server.decorate('scheduler', scheduler)
 })

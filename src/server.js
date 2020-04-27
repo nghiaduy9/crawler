@@ -4,17 +4,16 @@ const crawlerModule = require('./modules/crawler')
 
 const { NODE_ENV, PORT } = process.env
 
-const main = async () => {
-  const server = fastify({
-    ignoreTrailingSlash: true,
-    logger: { level: NODE_ENV !== 'production' ? 'debug' : 'info' }
-  })
+const server = fastify({
+  ignoreTrailingSlash: true,
+  logger: { level: NODE_ENV !== 'production' ? 'debug' : 'info' },
+})
 
+const main = async () => {
   try {
-    server.register(loaders.spiderman)
-    server.register(crawlerModule.router, (parent) => {
-      return { scheduler: parent.scheduler }
-    })
+    await server.register(loaders.spiderman)
+
+    server.register(crawlerModule.router)
 
     await server.listen(PORT, '::') // listen to all IPv6 and IPv4 addresses
   } catch (err) {

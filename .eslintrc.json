@@ -1,13 +1,19 @@
 {
   "env": {
     "es2020": true,
+    "jest": true,
     "node": true
   },
-  "extends": ["eslint:recommended"],
+  "extends": [
+    "eslint:recommended",
+    "plugin:jest/recommended",
+    "plugin:prettier/recommended"
+  ],
   "parserOptions": {
     "ecmaVersion": 2020,
     "ecmaFeatures": {
       "impliedStrict": true
     }
-  }
+  },
+  "plugins": ["jest"]
 }
