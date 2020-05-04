@@ -1,5 +1,5 @@
 const { Scraper: SpidermanScraper } = require('@albert-team/spiderman')
-const { JSDOM } = require('jsdom')
+const { chromium } = require('playwright')
 const userAgents = require('../../../user-agents.private.json')
 
 class Scraper extends SpidermanScraper {
@@ -8,15 +8,25 @@ class Scraper extends SpidermanScraper {
     this.watchData = watchData
   }
 
-  parse(html) {
-    const dom = new JSDOM(html)
-    const { document } = dom.window
+  parse() {
+    throw new Error('This should never be executed!')
+  }
+
+  async process(url) {
+    const browser = await chromium.launch()
+    const context = await browser.newContext()
+    const page = await context.newPage()
+    await page.goto(url)
     const data = {} // mapping from CSS selectors to their values
     const { targets } = this.watchData
     for (const target of targets) {
       // for now, ignore types and treat everything as string
       const { cssSelector } = target
-      data[cssSelector] = document.querySelector(cssSelector).textContent.trim()
+      await page.waitForSelector(cssSelector)
+      data[cssSelector] = await page.evaluate(() => {
+        // eslint-disable-next-line
+        return document.body.querySelector(cssSelector).textContent.trim()
+      })
     }
     return { data, nextUrls: [] }
   }
