@@ -28,10 +28,10 @@ class Scraper extends SpidermanScraper {
       const { cssSelector } = target
       await page.waitForSelector(cssSelector)
       data[cssSelector] = await page.evaluate(() => {
+        // eslint-disable-next-line
         return document.body.querySelector(cssSelector).textContent.trim()
       })
     }
-    Scraper.browser.close()
     return { data, nextUrls: [] }
   }
 }

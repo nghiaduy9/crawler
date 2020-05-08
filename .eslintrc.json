@@ -15,5 +15,6 @@
       "impliedStrict": true
     }
   },
+  "parser": "babel-eslint",
   "plugins": ["jest"]
 }
