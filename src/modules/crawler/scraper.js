@@ -1,5 +1,5 @@
 const { Scraper: SpidermanScraper } = require('@albert-team/spiderman')
-const { chromium } = require('playwright')
+const { firefox } = require('playwright')
 const userAgents = require('../../../user-agents.private.json')
 
 class Scraper extends SpidermanScraper {
@@ -12,9 +12,13 @@ class Scraper extends SpidermanScraper {
     throw new Error('This should never be executed!')
   }
 
+  static browser = null
+
   async process(url) {
-    const browser = await chromium.launch()
-    const context = await browser.newContext()
+    if (!Scraper.browser) {
+      Scraper.browser = await firefox.launch()
+    }
+    const context = await Scraper.browser.newContext()
     const page = await context.newPage()
     await page.goto(url)
     const data = {} // mapping from CSS selectors to their values
@@ -24,10 +28,10 @@ class Scraper extends SpidermanScraper {
       const { cssSelector } = target
       await page.waitForSelector(cssSelector)
       data[cssSelector] = await page.evaluate(() => {
-        // eslint-disable-next-line
         return document.body.querySelector(cssSelector).textContent.trim()
       })
     }
+    Scraper.browser.close()
     return { data, nextUrls: [] }
   }
 }
